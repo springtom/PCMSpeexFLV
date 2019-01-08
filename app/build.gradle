@@ -1,0 +1,56 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.3"
+    defaultConfig {
+//        applicationId "com.ai.mei"
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk {
+            //在JNI打log 必须加上log,否则会报错log函数未定义,
+            ldLibs "log"
+//            //指定生成模块名字,也就是最终的动态库名hello-jni,相应库文件名libhello-jni.so moduleName "hello-jni"
+            moduleName "libspeex"
+            // 设置支持的SO库架构
+            abiFilters "armeabi", 'armeabi-v7a', 'arm64-v8a'
+
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+//    sourceSets {
+//        main {
+//            jniLibs.srcDirs = ['libs']
+//        }
+//    }
+//    sourceSets.main {
+//        jni.srcDirs = []
+//        jniLibs.srcDir 'src/main/jni'
+//    }
+
+    sourceSets {
+        main {
+            jni.srcDirs = []
+//            jniLibs.srcDir "src/main/libs"
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    testCompile 'junit:junit:4.12'
+}
